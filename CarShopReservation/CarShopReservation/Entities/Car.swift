@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Car {
+struct Car: Hashable {
     var brand: String = ""
     var model: String = ""
     var year: Int = 0

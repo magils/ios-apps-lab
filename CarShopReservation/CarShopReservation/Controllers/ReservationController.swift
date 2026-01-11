@@ -8,13 +8,16 @@
 import Foundation
 
 class ReservationController {
-    private var reservations = [Reservation]()
+    static let shared = ReservationController()
+    private var reservations = [Appointment]()
     
-    func addReservation(_ reservation: Reservation){
+    private init() {}
+    
+    func addReservation(_ reservation: Appointment){
         self.reservations.append(reservation)
     }
     
-    func getReservations() -> [Reservation] {
+    func getReservations() -> [Appointment] {
         return self.reservations
     }
 }

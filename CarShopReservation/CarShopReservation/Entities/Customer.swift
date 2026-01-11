@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Customer {
+struct Customer: Hashable {
     var fullName: String
     var phoneNumber: String
     var email: String

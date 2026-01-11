@@ -15,9 +15,9 @@ struct MainView: View {
                     Label("Locations", systemImage: "globe")
                 }
 
-            ShopsView()
+            AppointmentListView()
                 .tabItem {
-                    Label("Reservations", systemImage: "calendar")
+                    Label("Appointments", systemImage: "calendar")
                 }
         }
     }

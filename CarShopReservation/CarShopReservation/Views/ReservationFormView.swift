@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ReservationFormView: View {
+    let location: ShopLocation
+
     private let data = Data()
-    private let reservationController = ReservationController()
+    private let reservationController = ReservationController.shared // TODO: Rename this controller to AppointmentController
     
     @State private var customerFullName = ""
     @State private var customerEmail = ""
@@ -17,7 +19,8 @@ struct ReservationFormView: View {
     @State private var carBrand = ""
     @State private var carModel = ""
     @State private var carYear = 0
-    @State private var serviceType: ServiceType?
+    @State private var carMileageInput = ""
+    @State private var serviceType = ""
     @State private var customerStatement = ""
     @State private var reservationDate = Date()
     @State private var isUnknownCarBrand = false
@@ -56,12 +59,20 @@ struct ReservationFormView: View {
                                 Text(verbatim: "\(year)")
                             }
                         }
+                        
                     }
                     
                     Toggle(isOn: $isUnknownCarBrand) {
                         Text("My car is not in the list")
                     }.onChange(of: isUnknownCarBrand) { newValue in
                         resetCarInformationFields()
+                    }
+                    
+                    HStack{
+                        Text("Mileage")
+                        TextField("Mileage", text: $carMileageInput)
+                            .keyboardType(.numberPad)
+                        Text("Mi.")
                     }
                     
                     if isUnknownCarBrand{
@@ -71,8 +82,8 @@ struct ReservationFormView: View {
                 
                 Section(header: Text("Service Details")) {
                     Picker(selection: $serviceType, label: Text("Service Type")){
-                        ForEach(ServiceType.allCases, id: \.self) { serviceType in
-                            Text(serviceType.rawValue)
+                        ForEach(ServiceType.allCases.map{ $0.rawValue }, id: \.self) { service in
+                            Text(service)
                         }
                     }
                     
@@ -88,7 +99,7 @@ struct ReservationFormView: View {
                             .frame(height: 120)
                     }
                 }
-            }.navigationTitle("New appointment")
+            }.navigationTitle("\(location.city) - New appointment")
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button("Reserve") {
@@ -152,7 +163,7 @@ struct ReservationFormView: View {
             throw ValidationError.emptyField(fieldName: "Unknown Car details")
         }
         
-        if serviceType == nil {
+        if serviceType.isEmpty {
             throw ValidationError.emptyField(fieldName: "Service Type")
         }
     }
@@ -165,10 +176,9 @@ struct ReservationFormView: View {
             let customer = Customer(fullName: customerFullName,  phoneNumber: customerPhoneNumber, email: customerEmail)
             let car = Car(brand: carBrand, model: carModel, year: carYear, isUnknown: isUnknownCarBrand, unknownName: unknowCar)
             let serviceDetail = ServiceDetail(serviceType: .oilChange, customerStatement: customerStatement)
-            let reservation = Reservation(customer: customer, reservationDate: reservationDate, car: car, serviceDetail: serviceDetail)
+            let reservation = Appointment(customer: customer, reservationDate: reservationDate, car: car, serviceDetail: serviceDetail)
             
             self.reservationController.addReservation(reservation)
-            
         } catch let error as ValidationError {
             validationError = error
         } catch {
@@ -180,5 +190,5 @@ struct ReservationFormView: View {
 }
 
 #Preview {
-    ReservationFormView()
+    ReservationFormView(location: ShopLocation(city: "San Francisco", address: "NV 33, Los Gatos", phoneNumber: "415-886-4514"))
 }

@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Reservation {
+struct Appointment: Hashable {
     let id = UUID()
     var customer: Customer
     var reservationDate: Date

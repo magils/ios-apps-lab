@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct ServiceDetail {
+struct ServiceDetail: Hashable {
     var serviceType: ServiceType
     var customerStatement: String
 }

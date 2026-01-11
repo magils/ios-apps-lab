@@ -14,7 +14,7 @@ struct ShopsView: View {
         VStack {
             NavigationView {
                 List(data.shops, id: \.self) { location in
-                    NavigationLink(destination: ReservationFormView()) {
+                    NavigationLink(destination: ReservationFormView(location: location)) {
                         VStack {
                             LocationSelectView(location)
                         }
