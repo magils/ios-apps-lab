@@ -13,4 +13,5 @@ struct Car: Hashable {
     var year: Int = 0
     var isUnknown: Bool = false
     var unknownName: String = ""
+    var mileage: Int = 0
 }

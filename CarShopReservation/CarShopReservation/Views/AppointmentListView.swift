@@ -8,9 +8,28 @@
 import SwiftUI
 
 struct AppointmentListView: View {
+    @StateObject private var controller = ReservationController.shared
+    
     var body: some View {
-        List(ReservationController.shared.getReservations(), id: \.self) { appointment in
-            Text("\(appointment.car.brand)")
+        NavigationView{
+            List( controller.getAppointments(), id: \.self) { appointment in
+                NavigationLink(destination: AppointmentDetailView(appointment: appointment)) {
+                    VStack(alignment: .leading) {
+                        HStack{
+                            Image(systemName: appointment.serviceDetail.serviceType.icon)
+                            
+                            Text("Service: \(appointment.serviceDetail.serviceType.rawValue)")
+                                .font(.title2)
+                        }
+                        
+                        Text("Date: \(appointment.reservationDate.formatted(date: .long, time: .shortened))")
+                            .font(.subheadline)
+                        
+                        Text("Customer: \(appointment.customer.fullName)")
+                            .font(.subheadline)
+                    }
+                }
+            }.navigationTitle(Text("Appointments"))
         }
     }
 }

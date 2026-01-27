@@ -26,6 +26,7 @@ struct ReservationFormView: View {
     @State private var isUnknownCarBrand = false
     @State private var unknowCar = ""
     @State private var validationError: ValidationError?
+    @State private var isAppointmentScheduleCompleted = false
 
     var body: some View {
         NavigationView {
@@ -110,6 +111,12 @@ struct ReservationFormView: View {
                                 message: Text(error.localizedDescription),
                                 dismissButton: .default(Text("OK"))
                             )
+                        }.alert(isPresented: $isAppointmentScheduleCompleted) {
+                            Alert(
+                                title: Text("Appointment scheduled"),
+                                message: Text("Your reservation has been scheduled successfully."),
+                                dismissButton: .default(Text("OK"))
+                            )
                         }
                     }
                 }
@@ -174,11 +181,14 @@ struct ReservationFormView: View {
             try validateData()
             
             let customer = Customer(fullName: customerFullName,  phoneNumber: customerPhoneNumber, email: customerEmail)
-            let car = Car(brand: carBrand, model: carModel, year: carYear, isUnknown: isUnknownCarBrand, unknownName: unknowCar)
+            let car = Car(brand: carBrand, model: carModel, year: carYear, isUnknown: isUnknownCarBrand, unknownName: unknowCar, mileage: Int(carMileageInput) ?? 0)
             let serviceDetail = ServiceDetail(serviceType: .oilChange, customerStatement: customerStatement)
-            let reservation = Appointment(customer: customer, reservationDate: reservationDate, car: car, serviceDetail: serviceDetail)
+            let reservation = Appointment(customer: customer, reservationDate: reservationDate, car: car, serviceDetail: serviceDetail, shopLocation: location)
             
             self.reservationController.addReservation(reservation)
+            
+            isAppointmentScheduleCompleted = true
+
         } catch let error as ValidationError {
             validationError = error
         } catch {

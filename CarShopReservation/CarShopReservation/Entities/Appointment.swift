@@ -12,4 +12,5 @@ struct Appointment: Hashable {
     var reservationDate: Date
     var car : Car
     var serviceDetail: ServiceDetail
+    var shopLocation: ShopLocation
 }
