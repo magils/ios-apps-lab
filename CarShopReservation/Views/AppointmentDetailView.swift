@@ -20,15 +20,14 @@ struct AppointmentDetailView: View {
         NavigationView {
             VStack{
                 Form {
-                    
                     Section(header: Text("Appoitnment Info")) {
                         HStack {
                             Text("Location: ")
                             Text(appointment.shopLocation.city)
                         }
                         HStack {
-                            Text("Time: ")
-                            Text("TODO")
+                            Text("Date/Time: ")
+                            Text(appointment.reservationDate.formatted(date: .abbreviated, time: .shortened))
                         }
                     }
                     Section(header: Text("Customer Info")) {

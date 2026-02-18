@@ -100,26 +100,28 @@ struct ReservationFormView: View {
                             .frame(height: 120)
                     }
                 }
-            }.navigationTitle("\(location.city) - New appointment")
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Reserve") {
-                            createReservation()
-                        }.alert(item: $validationError) { error in
-                            Alert(
-                                title: Text("Error"),
-                                message: Text(error.localizedDescription),
-                                dismissButton: .default(Text("OK"))
-                            )
-                        }.alert(isPresented: $isAppointmentScheduleCompleted) {
-                            Alert(
-                                title: Text("Appointment scheduled"),
-                                message: Text("Your reservation has been scheduled successfully."),
-                                dismissButton: .default(Text("OK"))
-                            )
-                        }
+            }.navigationTitle("New appointment")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Reserve") {
+                        createReservation()
                     }
                 }
+            }
+            .alert(item: $validationError) { error in
+                Alert(
+                    title: Text("Error"),
+                    message: Text(error.localizedDescription),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+        }
+        .alert(isPresented: $isAppointmentScheduleCompleted) {
+            Alert(
+                title: Text("Appointment scheduled"),
+                message: Text("Your reservation has been scheduled successfully."),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
     
@@ -182,7 +184,7 @@ struct ReservationFormView: View {
             
             let customer = Customer(fullName: customerFullName,  phoneNumber: customerPhoneNumber, email: customerEmail)
             let car = Car(brand: carBrand, model: carModel, year: carYear, isUnknown: isUnknownCarBrand, unknownName: unknowCar, mileage: Int(carMileageInput) ?? 0)
-            let serviceDetail = ServiceDetail(serviceType: .oilChange, customerStatement: customerStatement)
+            let serviceDetail = ServiceDetail(serviceType: ServiceType(rawValue: serviceType) ?? .other, customerStatement: customerStatement)
             let reservation = Appointment(customer: customer, reservationDate: reservationDate, car: car, serviceDetail: serviceDetail, shopLocation: location)
             
             self.reservationController.addReservation(reservation)

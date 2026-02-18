@@ -27,6 +27,9 @@ struct AppointmentListView: View {
                         
                         Text("Customer: \(appointment.customer.fullName)")
                             .font(.subheadline)
+                        
+                        Text("Location: \(appointment.shopLocation.city)")
+                            .font(.subheadline)
                     }
                 }
             }.navigationTitle(Text("Appointments"))
